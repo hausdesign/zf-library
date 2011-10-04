@@ -1,7 +1,7 @@
 <?php
 require_once 'Zend/Application.php';
 
-class HausDesign_Application extends Zend_Application
+class HausDesign_Application2 extends Zend_Application
 {
     /**
      * Holds the application
