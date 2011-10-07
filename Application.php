@@ -1,38 +1,10 @@
 <?php
-/**
- * HausDesign
- *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://www.HausDesign.nl/license/new-bsd
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to info@HausDesign.nl so we can send you a copy immediately.
- *
- * @category   HausDesign
- * @package    HausDesign_Application
- * @copyright  Copyright (c) 2009 HausDesign (www.HausDesign.nl)
- * @license    http://www.HausDesign.nl/license/new-bsd     New BSD License
- * @version    $Id: Application.php 229 2009-07-21 22:33:00Z koen $
- */
-
 require_once 'Zend/Application.php';
 
- /**
- * Initializes the HausDesign CMS
- *
- * @category   HausDesign
- * @package    HausDesign_Application
- * @copyright  Copyright (c) 2009 HausDesign (www.HausDesign.nl)
- * @license    http://www.HausDesign.nl/license/new-bsd     New BSD License
- */
 class HausDesign_Application extends Zend_Application
 {
     /**
-     * Holds the application of the current request
+     * Holds the application
      *
      * @var string
      */
@@ -88,8 +60,7 @@ class HausDesign_Application extends Zend_Application
     {
         parent::__construct($environment, $options);
 
-        // Retrieve the current application
-        $this->_application = $this->_parseApplicationFromUrl();
+        $this->_parseUrl();
 
         define('CUR_APPLICATION_PATH', realpath(APPLICATION_PATH . '' . DIRECTORY_SEPARATOR . '' . $this->_application . '' . DIRECTORY_SEPARATOR));
 
@@ -108,115 +79,65 @@ class HausDesign_Application extends Zend_Application
         Zend_Registry::set('config', $this->getOptions());
     }
 
-    /**
-     * Returns the Application Name of the current request
-     *
-     * @return string
-     * @todo Allow wildcard for the subdomains
-     * @todo Error handling
-     */
-    protected function _parseApplicationFromUrl()
+    protected function _parseUrl()
     {
-        $application = 'application';
+        // Get the http host
+        $httpHost = $_SERVER['HTTP_HOST'];
 
-        if ($this->_application == null) {
-            try {
-                $config = new Zend_Config_Xml(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'domains.xml');
+        // Split http host into chunks
+        $httpHostChunks = explode('.', $_SERVER['HTTP_HOST']);
 
-                if (isset($config->default) && isset($config->default->application)) {
-                    $application = $config->default->application;
-                }
-
-                $cleanDomainName = $_SERVER['HTTP_HOST'];
-                $subdomain = '';
-
-                $httpHostParts = explode('.', $_SERVER['HTTP_HOST']);
-
-                switch (count($httpHostParts)) {
-                	case '1':
-                		$cleanDomainName = $httpHostParts[0];
-                		$subdomain = '';
-                		break;
-
-                	case '2':
-                		$cleanDomainName = $httpHostParts[count($httpHostParts) - 2] . '.' . $httpHostParts[count($httpHostParts) - 1];
-                		$subdomain = $httpHostParts[0];
-                		break;
-
-                	case '3':
-                		$cleanDomainName = $httpHostParts[count($httpHostParts) - 2] . '.' . $httpHostParts[count($httpHostParts) - 1];
-                		$subdomain = $httpHostParts[0];
-                		break;
-                }
-
-                // Check if there is a domain configuration available for the entered domain
-                $basePath = '';
-
-                $configDomain = null;
-                foreach ($config->domains as $domain) {
-                    foreach($domain->addresses as $address) {
-                        if (($address->address == $cleanDomainName) || ($address->address == '*')) {
-                            $configDomain = $domain;
-                            $basePath = $address->base;
-
-                            $url = preg_replace('#^' . trim($basePath, '/') . '#', '', trim($_SERVER['REQUEST_URI'], '/'));
-
-                			$requestUriParts = explode('/', trim($url, '/'));
-                			$directory = $requestUriParts[0];
-                        }
-                    }
-                }
-
-                // Execute the domain configuration (routing)
-                if (! is_null($configDomain)) {
-                    $application = $configDomain->default;
-                    if (($configDomain->applications !== null) && (is_object($configDomain->applications)) && (get_class($configDomain->applications) == 'Zend_Config')) {
-                        foreach ($configDomain->applications as $configApplicationName => $configApplication) {
-                            switch ($configApplication->type) {
-                                case 'subdomain':
-                                    if ($subdomain == $configApplicationName) {
-                                        $application = $configApplication->application;
-                                        break;
-                                    }
-                                    break;
-                                case 'directory':
-                                    if ($directory == $configApplicationName) {
-                                        $application = $configApplication->application;
-                                        if ($basePath != '') $basePath .= '/';
-                                        $this->_baseUrl = $basePath . $application;
-                                        break;
-                                    }
-                                    break;
-                                case 'both':
-                                    if ($directory == $configApplicationName) {
-                                    	$application = $configApplication->application;
-                                        //if ($basePath != '') $basePath .= '/';
-                                        $this->_baseUrl = $basePath . $application;
-                                    	break;
-                                    } elseif ($subdomain == $configApplicationName) {
-                                        $application = $configApplication->application;
-                                        break;
-                                    }
-                                    break;
-                            }
-                        }
-                    }
-                } else {
-                    
-                }
-            } catch (Exception $exception) {
-                
-            }
-
-            $this->_application = $application;
-
-            if (($this->_baseUrl === null) && ($basePath != '')) {
-                $this->_baseUrl = $basePath;
-            }
-
-            return $this->_application;
-
-            //$_SERVER['REQUEST_URI'] = '/' . implode($pathSegments, '/') . '/';
+        // Is there a subdomein (first element in http host) specified?
+        $subdomain = '';
+        if (count($httpHostChunks) == 1) {
+            $domain = $httpHostChunks[0];
+        } else {
+            $subdomain = array_shift($httpHostChunks);
+            $domain = implode('.', $httpHostChunks);
         }
-     }
+
+        // Get querystring
+        $queryString = trim($_SERVER['REQUEST_URI'], '/');
+
+        // Split querystring into chunks
+        $queryStringChunks = explode('/', $queryString);
+
+        // Is there a directory (first element in query string) specified?
+        $directory = '';
+        if (isset($queryStringChunks[0])) {
+            $directory = (string) $queryStringChunks[0];
+        }
+
+        $filepath = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'routing.xml';
+        if (file_exists($filepath)) {
+            $xml = simplexml_load_file($filepath);
+            foreach ($xml as $route) {
+                $check = true;
+
+                if ($check && ((string) $route['domain'] != '') && ((string) $route['domain'] != '*')) {
+                    if ($domain != (string) $route['domain']) {
+                        $check = false;
+                    }
+                }
+
+                if ($check && ((string) $route['subdomain'] != '') && ((string) $route['subdomain'] != '*')) {
+                    if ($subdomain != (string) $route['subdomain']) {
+                        $check = false;
+                    }
+                }
+
+                if ($check && ((string) $route['directory'] != '') && ((string) $route['directory'] != '*')) {
+                    if ($directory != (string) $route['directory']) {
+                        $check = false;
+                    }
+                }
+
+                if ($check) {
+                    $this->_application = (string) $route->application;
+                    $this->_baseUrl = (string) $route->baseurl;
+                    break;
+                }
+            }
+        }
+    }
 }
