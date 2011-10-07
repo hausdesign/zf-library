@@ -37,13 +37,13 @@ class HausDesign_View_Helper_FormDateTime extends Zend_View_Helper_FormText
 
         $locale = Zend_Registry::getInstance()->Zend_Locale;
 
-        $this->view->headScript()->appendFile($this->view->baseUrl('/scripts/jquery-plugins/dateplustimepicker/js/jquery-dateplustimepicker.min.js', false));
-        $this->view->headLink()->appendStylesheet($this->view->baseUrl('/scripts/jquery-plugins/dateplustimepicker/css/jquery-dateplustimepicker.min.css', false), 'screen');
+        $this->view->headScript()->appendFile($this->view->baseUrl('/scripts/jquery-ui-plugins/timepicker/jquery-ui-timepicker-addon.js', false));
+        $this->view->headLink()->appendStylesheet($this->view->baseUrl('/scripts/jquery-ui-plugins/timepicker/jquery-ui-timepicker-addon.css', false), 'screen');
 
         $this->view->headScript()->captureStart();
 ?>
 $(document).ready(function() {
-    $('#<?php echo $this->view->escape($id); ?>').dateplustimepicker({
+    $('#<?php echo $this->view->escape($id); ?>').datetimepicker({
         dateFormat: '<?php echo $dateFormat; ?>',
         timeFormat: '<?php echo $timeFormat; ?>'
     });
