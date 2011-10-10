@@ -1,8 +1,8 @@
 <?php
-class HausDesign_View_Helper_FormDateTime extends Zend_View_Helper_FormText
+class HausDesign_View_Helper_FormTime extends Zend_View_Helper_FormText
 {
     /**
-     * Generates a 'calendar' element.
+     * Generates a 'time' element.
      *
      * @access public
      *
@@ -16,7 +16,7 @@ class HausDesign_View_Helper_FormDateTime extends Zend_View_Helper_FormText
      *
      * @return string The element XHTML.
      */
-    public function formDateTime($name, $value = null, $attribs = null)
+    public function formTime($name, $value = null, $attribs = null)
     {
         $locale = Zend_Registry::getInstance()->Zend_Locale;
 
@@ -36,7 +36,7 @@ class HausDesign_View_Helper_FormDateTime extends Zend_View_Helper_FormText
         // TODO: Allow translation of DatePicker Text Values to get this action from client to server
         $params = ZendX_JQuery::encodeJson($params);
 
-        $js = sprintf('%s("#%s").datetimepicker(%s);',
+        $js = sprintf('%s("#%s").timepicker(%s);',
                 ZendX_JQuery_View_Helper_JQuery::getJQueryHandler(),
                 $attribs['id'],
                 $params

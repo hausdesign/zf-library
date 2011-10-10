@@ -8,14 +8,14 @@ class HausDesign_Application extends Zend_Application
      *
      * @var string
      */
-    protected $_application = null;
+    protected $_application = 'default';
 
     /**
      * Holds the base url
      *
      * @var string
      */
-    protected $_baseUrl = null;
+    protected $_baseUrl = '/';
 
     /**
      * Get the application name
@@ -24,10 +24,6 @@ class HausDesign_Application extends Zend_Application
      */
     public function getApplication()
     {
-        if (is_null($this->_application)) {
-            $this->_application = $this->_parseApplicationFromUrl();
-        }
-
         return $this->_application;
     }
 

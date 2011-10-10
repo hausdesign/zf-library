@@ -1,5 +1,5 @@
 <?php
-class HausDesign_Form_Element_JQueryMultiselect extends Zend_Form_Element_Select
+class HausDesign_Form_Element_JQueryMultiSelect extends Zend_Form_Element_Select
 {
     /**
      * 'multiple' attribute
@@ -11,7 +11,7 @@ class HausDesign_Form_Element_JQueryMultiselect extends Zend_Form_Element_Select
      * Use formSelect view helper by default
      * @var string
      */
-    public $helper = 'formJQueryMultiselect';
+    public $helper = 'formJQueryMultiSelect';
 
     /**
      * Multiselect is an array of values by default

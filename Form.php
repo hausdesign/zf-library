@@ -8,8 +8,8 @@ class HausDesign_Form extends Zend_Form
      */
     function __construct($options = null)
     {
-        $this->addPrefixPath('HausDesign_JQuery_Form_', 'HausDesign/JQuery/Form/');
         $this->addPrefixPath('ZendX_JQuery_Form_', 'ZendX/JQuery/Form/');
+        $this->addPrefixPath('HausDesign_JQuery_Form_', 'HausDesign/JQuery/Form/');
         $this->addPrefixPath('HausDesign_Form_', 'HausDesign/Form/');
         $this->addPrefixPath('Application_Form_', 'Application/Form/');
 
