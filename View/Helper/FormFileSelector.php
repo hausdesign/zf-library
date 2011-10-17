@@ -23,44 +23,50 @@ class HausDesign_View_Helper_FormFileSelector extends Zend_View_Helper_FormText
         $this->view->headLink()->prependStylesheet($this->view->baseUrl('/scripts/jquery-plugins/fancybox/jquery.fancybox.css', false), 'screen');
         $this->view->headScript()->prependFile($this->view->baseUrl('/scripts/jquery-plugins/fancybox/jquery.mousewheel.pack.js', false));
         $this->view->headScript()->prependFile($this->view->baseUrl('/scripts/jquery-plugins/fancybox/jquery.fancybox.pack.js', false));
+        //$this->view->headScript()->appendFile($this->view->baseUrl('/scripts/ckfinder/ckfinder.js', false));
 
-        $this->view->headScript()->appendFile($this->view->baseUrl('/scripts/ckfinder/ckfinder.js', false));
+        $jquery = $this->view->jQuery();
+        $jquery->enable()
+               ->uiEnable();
 
-        $elementId = str_replace('-', '_', $id);
+        $elementId = $this->view->escape(str_replace('-', '_', $id));
         $callBackFunction = 'setFieldValue' . md5($elementId);
+        $idEscaped = $this->view->escape($id);
+        $url = $this->view->baseUrl('/scripts/ckfinder/ckfinder.html?action=js&func=' . $callBackFunction .  '', false);
+        
+$js = <<<TOKEN
+var finder_{$elementId}_dialog;
 
-        $this->view->headScript()->captureStart();
-?>
-var finder_<?php echo $this->view->escape($elementId); ?>_dialog;
-
-function <?php echo $callBackFunction; ?>(value)
+function $callBackFunction(value)
 {
     value = decodeURIComponent((value + '').replace(/\+/g, '%20'));
     value = value.replace('system\/file\/download\/\?file=', '');
 
-    $('#<?php echo $this->view->escape($id); ?>').val(value);
+    $('#$idEscaped').val(value);
     $.fancybox.close();
 }
+TOKEN;
 
-$(document).ready(function() {
-    $('#finder_<?php echo $id; ?>_button').button().click(function() {
-        finder_<?php echo $elementId; ?>_dialog = $.fancybox({
-            'width'          : '75%',
-            'height'         : '75%',
-            'title'          : '',
-            'autoScale'      : false,
-            'transitionIn'   : 'none',
-            'transitionOut'  : 'none',
-            'centerOnScroll' : true,
-            'type'           : 'iframe',
-            'href'           : '<?php echo $this->view->baseUrl('/scripts/ckfinder/ckfinder.html?action=js&func=' . $callBackFunction .  '', false); ?>'
-        });
-
-        return false;
+$jsOnload = <<<TOKEN
+$('#finder_{$id}_button').button().click(function() {
+    finder_{$elementId}_dialog = $.fancybox({
+        'width'          : '75%',
+        'height'         : '75%',
+        'title'          : '',
+        'autoScale'      : false,
+        'transitionIn'   : 'none',
+        'transitionOut'  : 'none',
+        'centerOnScroll' : true,
+        'type'           : 'iframe',
+        'href'           : '$url'
     });
+
+    return false;
 });
-<?php
-        $this->view->headScript()->captureEnd();
+TOKEN;
+
+        $jquery->addJavascript($js);
+        $jquery->addOnLoad($jsOnload);
 
         $xhtml = '';
 
