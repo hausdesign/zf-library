@@ -9,12 +9,14 @@ class HausDesign_Application_Resource_Zfdebug extends Zend_Application_Resource_
             $autoloader->registerNamespace('ZFDebug');
 
             $options = array(
-                'plugins' => array('Variables', 
-                                   'File' => array('base_path' => $options['base_path'])),
-                                   'Memory', 
-                                   'Time', 
-                                   'Registry', 
-                                   'Exception')
+                'plugins' => array(
+                    'Variables', 
+                    'File' => array('base_path' => $options['base_path']),
+                    'Memory', 
+                    'Time', 
+                    'Registry', 
+                    'Exception'
+                )
             );
 
             # Instantiate the database adapter and setup the plugin.

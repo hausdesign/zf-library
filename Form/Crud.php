@@ -132,10 +132,6 @@ class HausDesign_Form_Crud extends HausDesign_Form
         foreach ($displayGroups as $displayGroupName => $displayGroupElements) {
             // Add the displaygroup for the selected elements
             $this->addDisplayGroup($displayGroupElements, $displayGroupName);
-
-            // Load the added displaygroup and setup the decorators
-            $displayGroup = $this->getDisplayGroup($displayGroupName);
-            $displayGroup->setDecorators(array('FormElements', 'Fieldset', array('HtmlTag', array('tag' => 'div', 'class' => 'dg-' . $displayGroupName))));
         }
     }
 }

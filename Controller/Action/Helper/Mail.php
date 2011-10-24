@@ -26,7 +26,7 @@ class HausDesign_Controller_Action_Helper_Mail extends Zend_Controller_Action_He
         $bcc = null, 
         $fromEmail = null, 
         $fromName = null, 
-        $layout = 'email',
+        $layout = null,
         $layoutPath = null)
     {
         $mail = $this->getMail(
@@ -75,7 +75,7 @@ class HausDesign_Controller_Action_Helper_Mail extends Zend_Controller_Action_He
         $bcc = null, 
         $fromEmail = null,
         $fromName = null,
-        $layout = 'email',
+        $layout = null,
         $layoutPath = null)
     {
         $mail = new HausDesign_Mail();
@@ -126,83 +126,89 @@ class HausDesign_Controller_Action_Helper_Mail extends Zend_Controller_Action_He
      */
     public function getMailContent($template, $substitutions, $placeholders = array(), $mode = 'html', $layout = null, $layoutPath = null)
     {
-        // create a view renderer and set it to app_path/emails/
+        // Create the return variable
+        $return = '';
+
+        // Create a view renderer
         $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
         $view = clone $viewRenderer->view;
 
-        if ($layout === null) {
-            $layout = 'email';
-        }
-
-        //$oldLayout = $view->layout();
-
-        // create a layout object and set it to app_path/emails/layouts
+        // Create a layout object and set it to app_path/emails/layouts
         if (($layoutPath === null) || ($layoutPath == '')) {
-            $layoutPath = PUBLIC_PATH . $view->templateUrl('');
+            $layoutPath = PUBLIC_PATH . $view->templateUrl('') . 'email' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR;
         }
+
+        // Create the layout object
         $layoutObject = new Zend_Layout($layoutPath);
 
+        // Add the script path to the view that overrules the default path
         $application = $this->getFrontController()->getParam('application');
         $module = $this->getRequest()->getModuleName();
         $scriptPath = $view->layout()->getViewScriptPath() . '/views/' . $application . '/modules/' . $module . '/';
         if (! in_array($scriptPath, $view->getScriptPaths())) {
             $view->addScriptPath($scriptPath);
         }
-        if (! in_array($scriptPath, $view->getScriptPaths())) {
-            $view->addScriptPath($scriptPath);
-        }
 
-        $view->addScriptPath(rtrim($layoutPath, '/') . '/emails/');
-        //$view->addScriptPath(rtrim($layoutPath, '/') . '/');
+        // Add the default email folder for the layout/template
+        $view->addScriptPath(PUBLIC_PATH . $view->templateUrl('') . 'email' . DIRECTORY_SEPARATOR . 'views');
 
-        //$view->getHelper('layout')->setLayout($layoutObject);
-
-        // assign all substitutions (e.g. view variables) to the view view
+        // Assign all substitutions (e.g. view variables) to the view view
         foreach ($substitutions as $key => $sub) {
             $view->$key = $sub;
         }
 
-        // replace all placeholders
+        // Replace all placeholders
         if (is_array($placeholders)) {
             foreach ($placeholders as $key => $sub) {
                 
             }
         }
 
-        $output = '';
-
+        // Set the view object to the layout object
         $layoutObject->setView($view);
+
+        // Initialize a default layout
+        if (($layout === null) || ($layout == '')) {
+            $layout = 'default';
+        }
 
         switch ($mode) {
             case 'html':
-                // render html version of template & assign to $output
+                // Render html version of template & assign to $return
                 $layoutObject->content = $view->render($template . '.html.phtml');
 
+                // Set the layout
                 $layoutObject->setLayout('' . $layout . '.html');
-                $output = $layoutObject->render();
 
-                $stylesheet = $layoutPath . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'email.css';
+                // Render the layout output
+                $return = $layoutObject->render();
+
+                // Assimilate the stylesheet in the html
+                $stylesheet = $layoutPath . $layout . '.css';
                 if (file_exists($stylesheet)) {
                     $stylesheetContent = file_get_contents($stylesheet);
-                    $test = new CSSToInlineStyles($output, $stylesheetContent);
-                    $output = $test->convert(true);
+                    $test = new CSSToInlineStyles($return, $stylesheetContent);
+                    $return = $test->convert(true);
                 }
                 break;
  
             case 'text':
-                // render text version of template & assign to $output
+                // Render text version of template & assign to $return
                 $layoutObject->content = $view->render($template . '.text.phtml');
+
+                // Set the layout
                 $layoutObject->setLayout('' . $layout . '.text');
-                $output = $layoutObject->render();
+
+                // Render the layout output
+                $return = $layoutObject->render();
                 break;
         }
 
-        $output = $this->_replacePlaceholders($output, $placeholders);
-
-        //$view->getHelper('layout')->setLayout($oldLayout);
+        // Replace the placeholders in the content
+        $return = $this->_replacePlaceholders($return, $placeholders);
 
         // all done, return output
-        return $output;
+        return $return;
     }
 
     /**
