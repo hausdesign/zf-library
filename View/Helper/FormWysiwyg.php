@@ -65,14 +65,14 @@ $(document).ready(function() {
 
         $stylesheet = $this->view->templateUrl('/styles/' . $stylesheetName);
         if (Zend_Registry::isRegistered('domain_site_language') && (($site = Zend_Registry::get('domain_site_language')) !== null)) {
-        	$domainSiteLanguage = Zend_Registry::get('domain_site_language');
-        	$site = $domainSiteLanguage->getSite();
-        	if ($site !== null) {
-        		$layout = $site->getLayout();
-        		if ($layout !== null) {
-        			$stylesheet = $this->view->baseUrl('/templates/' .  $layout->layout_directory . '/styles/' . $stylesheetName, false);
-        		}
-        	}
+            $domainSiteLanguage = Zend_Registry::get('domain_site_language');
+            $site = $domainSiteLanguage->getSite();
+            if ($site !== null) {
+                $theme = $site->getTheme();
+                if ($theme !== null) {
+                    $stylesheet = $this->view->baseUrl('/templates/' .  $theme->theme_directory . '/styles/' . $stylesheetName, false);
+                }
+            }
         }
         ?>
         contentsCss: '<?php echo $stylesheet; ?>',
