@@ -47,7 +47,7 @@ class HausDesign_Form_SubForm extends Zend_Form_SubForm
         return parent::createElement($type, $name, $options);
     }
 
-    public function setSubFormErrorClass()
+    public function setErrorClass()
     {
         foreach ($this->getSubForms() as $subForm) {
             if ($subForm->isErrors()) {
@@ -61,7 +61,7 @@ class HausDesign_Form_SubForm extends Zend_Form_SubForm
 
                 $subForm->setAttrib('class', $class);
 
-                $subForm->setSubFormErrorClass();
+                $subForm->setErrorClass();
             }
         }
     }

@@ -154,7 +154,7 @@ class HausDesign_Controller_Action_Crud extends HausDesign_Controller_Action
         }
 
         // Set the class "error" to subforms with errors
-        $this->_form->setSubFormErrorClass('error');
+        $this->_form->setErrorClass('error');
 
         // Parse the form to the view
         $this->view->form = $this->_form;
@@ -235,7 +235,7 @@ class HausDesign_Controller_Action_Crud extends HausDesign_Controller_Action
         }
 
         // Set the class "error" to subforms with errors
-        $this->_form->setSubFormErrorClass('error');
+        $this->_form->setErrorClass('error');
 
         // Parse the form to the view
         $this->view->form = $this->_form;

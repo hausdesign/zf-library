@@ -8,19 +8,12 @@ class HausDesign_Form extends Zend_Form
      */
     function __construct($options = null)
     {
+        // Set the prefix paths
         $this->addPrefixPath('HausDesign_JQuery_Form_', 'HausDesign/JQuery/Form/');
         $this->addPrefixPath('ZendX_JQuery_Form_', 'ZendX/JQuery/Form/');
         $this->addPrefixPath('HausDesign_JQuery_Form_', 'HausDesign/JQuery/Form/');
         $this->addPrefixPath('HausDesign_Form_', 'HausDesign/Form/');
         $this->addPrefixPath('Application_Form_', 'Application/Form/');
-
-        $this->setDecorators(array(
-            array('JqueryDescription', array('escape' => false)),
-            'JqueryFormErrorMessages',
-            'FormElements',
-            array('HtmlTag', array('tag' => 'dl', 'class' => 'zend_form')),
-            'Form'
-        ));
 
         // Set the form name
         $this->setName(strtolower(get_class($this)));
@@ -68,8 +61,27 @@ class HausDesign_Form extends Zend_Form
         return parent::createElement($type, $name, $options);
     }
 
-    public function setSubFormErrorClass()
+    public function setErrorClass()
     {
+        foreach ($this->getElements() as $element) {
+            if ($element->hasErrors()) {
+                $class = $element->getAttrib('class');
+                if ($class == null) $class = '';
+                if ($class != '') $class .= ' ';
+                $class .= 'error';
+                $element->setAttrib('class', $class);
+
+                $row = $element->getDecorator('row');
+                if ($row !== null) {
+                    $class = $row->getOption('class');
+                    if ($class == null) $class = '';
+                    if ($class != '') $class .= ' ';
+                    $class .= 'error';
+                    $row->setOption('class', $class);
+                }
+            }
+        }
+
         foreach ($this->getSubForms() as $subForm) {
             if ($subForm->isErrors()) {
                 $class = $subForm->getAttrib('class');
@@ -82,7 +94,7 @@ class HausDesign_Form extends Zend_Form
 
                 $subForm->setAttrib('class', $class);
 
-                $subForm->setSubFormErrorClass();
+                $subForm->setErrorClass();
             }
         }
     }
