@@ -21,7 +21,7 @@ class HausDesign_View_Helper_FormFileSelector extends Zend_View_Helper_FormText
         }
 
         $this->view->headLink()->prependStylesheet($this->view->baseUrl('/scripts/jquery-plugins/fancybox/jquery.fancybox.css', false), 'screen');
-        $this->view->headScript()->prependFile($this->view->baseUrl('/scripts/jquery-plugins/fancybox/jquery.mousewheel.pack.js', false));
+        $this->view->headScript()->prependFile($this->view->baseUrl('/scripts/jquery-plugins/mousewheel/jquery.mousewheel.js', false));
         $this->view->headScript()->prependFile($this->view->baseUrl('/scripts/jquery-plugins/fancybox/jquery.fancybox.pack.js', false));
         //$this->view->headScript()->appendFile($this->view->baseUrl('/scripts/ckfinder/ckfinder.js', false));
 

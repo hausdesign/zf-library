@@ -4,18 +4,18 @@ class HausDesign_View_Helper_FormJQueryMultiSelect extends Zend_View_Helper_Form
     public function formJQueryMultiselect($name, $value = null, $attribs = null,
         $options = null, $listsep = "<br />\n")
     {
-        if (array_key_exists('jqueryParams', $attribs)) {
-            $jqueryParams = $attribs['jqueryParams'];
-            $jqueryParams = ZendX_JQuery::encodeJson($jqueryParams);
-            unset($attribs['jqueryParams']);
+        if (array_key_exists('jQueryParams', $attribs)) {
+            $jQueryParams = $attribs['jQueryParams'];
+            $jQueryParams = ZendX_JQuery::encodeJson($jQueryParams);
+            unset($attribs['jQueryParams']);
         } else {
-            $jqueryParams = array();
+            $jQueryParams = array();
         }
 
         $js = sprintf('%s("#%s").multiselect(%s);',
             ZendX_JQuery_View_Helper_JQuery::getJQueryHandler(),
             $attribs['id'],
-            $jqueryParams
+            $jQueryParams
         );
 
         $this->view->headScript()->appendFile($this->view->baseUrl('/scripts/jquery-plugins/multiselect/src/jquery.multiselect.js', false));

@@ -15,6 +15,7 @@ class HausDesign_Form_Jquery extends HausDesign_Form
             array('JqueryDescription', array('escape' => false)),
             'JqueryFormErrorMessages',
             'FormElements',
+            array('HtmlTag', array('tag' => 'dl', 'class' => 'zend_form')),
             'Form'
         ));
     }
