@@ -47,9 +47,10 @@ class HausDesign_View_Helper_FormTextOverwrite extends Zend_View_Helper_FormElem
             unset($attribs['separator']); 
         }
 
-        $xhtml = '';
-        $xhtml .= '<div class="checkboxTextFieldCombo">';
+        $xhtml = '<div class="input-prepend">';
+        $xhtml .= '<label class="add-on">';
         $xhtml .= $viewHelperFormCheckbox->formCheckbox($name . '[overwrite]', null, array_merge($attribs, array('checked' => $checked, 'class' => 'checkbox text-overwrite-checkbox')));
+        $xhtml .= '</label>';
         $xhtml .= ' ' . $separator;
         if (! $disabled) {
             $xhtml .= $viewHelperFormElement->formText($name . '[value]', $value, array_merge($attribs, array('disabled' => 'disabled')));

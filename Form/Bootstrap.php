@@ -27,7 +27,7 @@ class HausDesign_Form_Bootstrap extends HausDesign_Form
         // Set the element decorators
         $this->_elementDecorators = array(
             'ViewHelper',
-            'Description',
+            array('Description', array('tag' => 'span', 'class' => 'help-block')),
             'Errors',
             array(array('data' => 'HtmlTag'), array('tag' => 'div', 'class' => 'input')),
             array('Label'),

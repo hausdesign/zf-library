@@ -15,6 +15,14 @@ class HausDesign_Form extends Zend_Form
         $this->addPrefixPath('HausDesign_Form_', 'HausDesign/Form/');
         $this->addPrefixPath('Application_Form_', 'Application/Form/');
 
+        $this->setDecorators(array(
+            array('JqueryDescription', array('escape' => false)),
+            'JqueryFormErrorMessages',
+            'FormElements',
+            array('HtmlTag', array('tag' => 'dl', 'class' => 'zend_form')),
+            'Form'
+        ));
+
         // Set the form name
         $this->setName(strtolower(get_class($this)));
 

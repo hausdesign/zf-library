@@ -81,6 +81,10 @@ class HausDesign_Controller_Plugin_Auth extends Zend_Controller_Plugin_Abstract
 
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
+        if (($request->getParam('sid') !== null) && ($request->getParam('PHPSESSID') === null)) {
+            $request->setParam('PHPSESSID', $request->getParam('sid'));
+        }
+
         if ($request->getParam('PHPSESSID') === null) {
             $module = strtolower($request->getModuleName());
             $controller = strtolower($request->getControllerName());
@@ -100,7 +104,7 @@ class HausDesign_Controller_Plugin_Auth extends Zend_Controller_Plugin_Abstract
                     $errorHandler->type      = 'EXCEPTION_NOT_ALLOWED';
                     $errorHandler->exception = new Zend_Controller_Action_Exception('No credentials available');
                     $errorHandler->request   = clone $request;
-    
+
                     $request->setParam('error_handler', $errorHandler)
                             ->setModuleName($this->getErrorHandlerModule())
                             ->setControllerName($this->getErrorHandlerController())
