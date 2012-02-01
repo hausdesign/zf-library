@@ -1,6 +1,13 @@
 <?php
-class HausDesign_Controller_Action_Crud extends HausDesign_Controller_Action
+class Application_Controller_Action_Crud extends Application_Controller_Action
 {
+	/**
+	 * Module
+	 * 
+	 * @var Zend_Db_Table_Row
+	 */
+	protected $_module;
+
     /**
      * Model
      * 
@@ -37,10 +44,6 @@ class HausDesign_Controller_Action_Crud extends HausDesign_Controller_Action
     	// Load the request object
     	$request = $this->getRequest();
 
-        // set the meta title
-        $this->view->headTitle(ucfirst($this->view->translate('title' . $this->_moduleName)), Zend_View_Helper_Placeholder_Container_Abstract::PREPEND);
-        $this->view->headTitle(ucfirst($this->view->translate('title' . $this->_translationName)), Zend_View_Helper_Placeholder_Container_Abstract::PREPEND);
-
         // Load the log
         $this->_log = $this->getInvokeArg('bootstrap')->getResource('Log');
 
@@ -57,13 +60,43 @@ class HausDesign_Controller_Action_Crud extends HausDesign_Controller_Action
         $this->_redirectUrlDelete = '/' . $request->getModuleName() . '/item/';
     }
 
+    /**
+     * Get the module
+     * 
+     * @return Zend_Db_Table_Row
+     */
+    protected function _getModule()
+    {
+    	if ($this->_module === null) {
+        	$modelModule = new Application_Model_Cms_MvcModule();
+        	$this->_module = $modelModule->fetchByName($this->getRequest()->getModuleName());
+    	}
+    	return $this->_module;
+    }
+
+    /**
+     * Load the item
+     * 
+     * @return void
+     */
     protected function _loadItem()
     {
         // Load the item
         $this->_item = null;
         $itemId = $this->getRequest()->getParam('id');
         if ($itemId !== null) {
-            $this->_item = $this->_model->find($itemId)->current();
+            $itemId = explode('|', $this->getRequest()->getParam('id'));
+
+    		switch(count($itemId)) {
+    			case 0: break;
+    			case 1: $this->_item = $this->_model->find($itemId[0])->current(); break;
+    			case 2: $this->_item = $this->_model->find($itemId[0], $itemId[1])->current(); break;
+    			case 3: $this->_item = $this->_model->find($itemId[0], $itemId[1], $itemId[2])->current(); break;
+    			case 4: $this->_item = $this->_model->find($itemId[0], $itemId[1], $itemId[2], $itemId[3])->current(); break;
+    			case 5: $this->_item = $this->_model->find($itemId[0], $itemId[1], $itemId[2], $itemId[3], $itemId[4])->current(); break;
+    			case 6: $this->_item = $this->_model->find($itemId[0], $itemId[1], $itemId[2], $itemId[3], $itemId[4], $itemId[5])->current(); break;
+    			case 7: $this->_item = $this->_model->find($itemId[0], $itemId[1], $itemId[2], $itemId[3], $itemId[4], $itemId[5], $itemId[6])->current(); break;
+    		}
         }
     }
 
@@ -98,9 +131,6 @@ class HausDesign_Controller_Action_Crud extends HausDesign_Controller_Action
 	                    // Parse the form data
 	                    $item = $this->_getItem('add');
 
-                        // Actions before the query
-                        $this->_beforeQuery('edit');
-
 	                    if (array_key_exists('form_class', $item)) {
                             unset($item['form_class']);
 	                    }
@@ -116,7 +146,6 @@ class HausDesign_Controller_Action_Crud extends HausDesign_Controller_Action
 	                    	$item = array($item);
 	                    }
 
-                        // Find the added item
 	    				switch(count($item)) {
 	        				case 0:  break;
 	        				case 1: $this->_item = $this->_model->find($item[0])->current(); break;
@@ -131,16 +160,10 @@ class HausDesign_Controller_Action_Crud extends HausDesign_Controller_Action
 	                    // Actions after the query
 	                    $this->_afterQuery('add');
 
-	                    // Set the form description
-	                    $this->_form->setDescription($this->view->translate('textSavedItemSuccesfull'));
-
-                        // Add the succesfull message to the flashmessenger
-	                    $this->_flashMessenger->addMessage($this->view->translate('textSavedItemSuccesfull'));
+	                    $this->_flashMessenger->addMessage('Added the item succesfully.');
 
 	                    // Redirect
-                        if (($this->_redirectUrlAdd !== null) && ($this->_redirectUrlAdd != '')) {
-                            $this->_redirect($this->_redirectUrlAdd);
-                        }
+	                    $this->_redirect($this->_redirectUrlAdd);
 	                }  catch (Exception $exception) {
 	                    $this->_form->addErrorMessage($exception->getMessage());
 	                }
@@ -193,9 +216,6 @@ class HausDesign_Controller_Action_Crud extends HausDesign_Controller_Action
 	                    // Parse the form data
 	                    $item = $this->_getItem('edit');
 
-                        // Actions before the query
-                        $this->_beforeQuery('edit');
-
 	                    if (array_key_exists('form_class', $item)) {
                             unset($item['form_class']);
 	                    }
@@ -213,15 +233,12 @@ class HausDesign_Controller_Action_Crud extends HausDesign_Controller_Action
 	                    $this->_afterQuery('edit');
 
 	                    // Set the form description
-	                    $this->_form->setDescription($this->view->translate('textSavedItemSuccesfull'));
+	                    $this->_form->setDescription('The item is succesfully saved');
 
-                        // Add the succesfull message to the flashmessenger
-	                    $this->_flashMessenger->addMessage($this->view->translate('textSavedItemSuccesfull'));
+	                    $this->_flashMessenger->addMessage('Saved the item succesfully.');
 
-	                    // Redirect
-                        if (($this->_redirectUrlEdit !== null) && ($this->_redirectUrlEdit != '')) {
-                            $this->_redirect($this->_redirectUrlEdit);
-                        }
+	                    // Redirect to the index
+	                    $this->_redirect($this->_redirectUrlEdit);
 	                } catch (Exception $exception) {
 	                    $this->_form->addErrorMessage($exception->getMessage());
 	                }
@@ -249,51 +266,51 @@ class HausDesign_Controller_Action_Crud extends HausDesign_Controller_Action
         // Get the request object
         $request = $this->getRequest();
 
+        // Check if the delete action is confirmed 
+        $confirm = intval($request->getParam('confirm', 0));
+
         $return = array();
 
-        if ($request->isXmlHttpRequest()) {
-            // Disable the layout and view
-            $this->_helper->layout()->disableLayout();
-            $this->_helper->viewRenderer->setNoRender(true);
-        }
-
         try {
-            // Check if the delete action is confirmed 
-            $confirm = intval($request->getParam('confirm', 0));
+            if ($this->_request->isXmlHttpRequest()) {
+                if ($confirm === 1) {
+                    // Delete the item
+                    $this->_item->delete();
 
-            if ($confirm === 1) {
-                // Actions before the query
-                $this->_beforeQuery('delete');
-
-                // Delete the item
-                $this->_item->delete();
-
-                // Actions after the query
-                $this->_afterQuery('delete');
-
-                $return['result'] = true;
-
-                if (! $request->isXmlHttpRequest()) {
-                    // Redirect to the index
-                    if (($this->_redirectUrlDelete !== null) && ($this->_redirectUrlDelete != '')) {
-                        $this->_redirect($this->_redirectUrlDelete);
-                    }
+                    $return['result'] = true;
+                } else {
+                    throw new Zend_Controller_Action_Exception('Delete action is not confirmed');
                 }
             } else {
-                if ($request->isXmlHttpRequest()) {
-                    throw new Zend_Controller_Action_Exception('the action is not confirmed');
+                if ($confirm === 1) {
+                    // Delete the item
+                    $this->_item->delete();
+                    
+                    $this->_flashMessenger->addMessage('Deleted the item succesfully.');
+                    
+                    // Redirect to the index
+                    $this->_redirect($this->_redirectUrlDeleteConfirm);
+                } else {
+                    
                 }
             }
         } catch (Exception $exception) {
-            $this->view->error = $exception->getMessage();
-
-            $return['result'] = false;
-            $return['error'] = $exception->getMessage();
+            if ($this->_request->isXmlHttpRequest()) {
+                $return['result'] = false;
+                $return['message'] = $exception->getMessage();
+            } else {
+                $this->view->error = $exception->getMessage();
+            }
         }
 
-        if ($request->isXmlHttpRequest()) {
+        if ($this->_request->isXmlHttpRequest()) {
+            // Disable layout and view renderer
+            $this->_helper->layout()->disableLayout();
+            $this->_helper->viewRenderer->setNoRender(true);
+
+            // Parse the years to the response object
             $this->_helper->json($return);
-        } 
+        }
     }
 
     /**
@@ -340,17 +357,7 @@ class HausDesign_Controller_Action_Crud extends HausDesign_Controller_Action
     }
 
     /**
-     * Executed before the save/edit/delete database operation
-     * 
-     * @param string $type
-     */
-    protected function _beforeQuery($type = '')
-    {
-        
-    }
-
-    /**
-     * Executed after the save/edit/delete database operation
+     * Executed after the save/edit database operation
      * 
      * @param string $type
      */

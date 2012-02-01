@@ -31,32 +31,32 @@ class HausDesign_Controller_Action extends Zend_Controller_Action
 
     /**
      * Log
-     *  
+     * 
      * @var Zend_Log
      */
     protected $_log;
 
     /**
      * FlashMessenger
-     *
+     * 
      * @var Zend_Controller_Action_Helper_FlashMessenger
      */
     protected $_flashMessenger = null;
 
     /**
+     * User
+     * 
+     * @var Zend_Db_Table_Row
+     */
+    protected $_user;
+
+    /**
      * (non-PHPdoc)
      * @see Zend_Controller_Action::init()
-     */    
+     */
     public function init()
     {
         parent::init();
-
-        // Load the log
-        $this->_log = $this->getInvokeArg('bootstrap')->log;
-
-        // Load the flashmessenger
-        $this->_flashMessenger = $this->_helper->getHelper('FlashMessenger');
-        $this->view->messages = $this->_flashMessenger->getMessages();
 
         // Load the module, controller and action names
         $this->view->module_name = $this->_moduleName = ucfirst($this->getRequest()->getModuleName());
@@ -65,5 +65,18 @@ class HausDesign_Controller_Action extends Zend_Controller_Action
 
         // Load the translation name
         $this->view->translation_name = $this->_translationName = $this->_moduleName . $this->_controllerName . $this->_actionName;
+
+        // Load the log
+        $this->_log = $this->getInvokeArg('bootstrap')->log;
+
+        // Load the flashmessenger
+        $this->_flashMessenger = $this->_helper->getHelper('FlashMessenger');
+        $this->view->messages = $this->_flashMessenger->getMessages();
+
+        // Load the user
+        $auth = Zend_Auth::getInstance();
+        if ($auth->hasIdentity()) {
+            $this->_user = $auth->getIdentity();
+        }
     }
 }
