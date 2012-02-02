@@ -1,5 +1,5 @@
 <?php 
-class Application_Log extends Zend_Log
+class HausDesign_Log extends Zend_Log
 {
     /**
      * Log filename (including the complete path)
@@ -88,7 +88,7 @@ class Application_Log extends Zend_Log
     /**
      * Write a footer to the log including the end time and the duration
      * 
-     * @return Application_Log
+     * @return HausDesign_Log
      */
     public function close()
     {

@@ -1,13 +1,6 @@
 <?php
-class Application_Controller_Action_Crud extends Application_Controller_Action
+class HausDesign_Controller_Action_Crud extends HausDesign_Controller_Action
 {
-	/**
-	 * Module
-	 * 
-	 * @var Zend_Db_Table_Row
-	 */
-	protected $_module;
-
     /**
      * Model
      * 
@@ -58,20 +51,6 @@ class Application_Controller_Action_Crud extends Application_Controller_Action
         $this->_redirectUrlAdd = '/' . $request->getModuleName() . '/item/';
         $this->_redirectUrlEdit = '/' . $request->getModuleName() . '/item/';
         $this->_redirectUrlDelete = '/' . $request->getModuleName() . '/item/';
-    }
-
-    /**
-     * Get the module
-     * 
-     * @return Zend_Db_Table_Row
-     */
-    protected function _getModule()
-    {
-    	if ($this->_module === null) {
-        	$modelModule = new Application_Model_Cms_MvcModule();
-        	$this->_module = $modelModule->fetchByName($this->getRequest()->getModuleName());
-    	}
-    	return $this->_module;
     }
 
     /**

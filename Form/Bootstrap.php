@@ -1,6 +1,5 @@
 <?php
-<?php
-class Application_Form_Bootstrap extends HausDesign_Form
+class HausDesign_Form_Bootstrap extends HausDesign_Form
 {
     /**
      * Constructor
