@@ -12,7 +12,7 @@ class HausDesign_View_Helper_BootstrapError extends HausDesign_View_Helper_Boots
     public function bootstrapError($messages = null)
     {
         return parent::bootstrapAlert($messages, array(
-        	'class' => 'error'
+            'class' => 'alert-error'
         ));
     }
 }

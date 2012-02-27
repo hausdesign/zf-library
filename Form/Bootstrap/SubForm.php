@@ -6,7 +6,6 @@ class HausDesign_Form_Bootstrap_SubForm extends HausDesign_Form_SubForm
         // Set the decorators
         $this->_decorators = array(
             array('BootstrapDescription', array('escape' => false)),
-            'BootstrapFormErrorMessages',
             'FormElements',
             'Fieldet'
         );
@@ -14,7 +13,6 @@ class HausDesign_Form_Bootstrap_SubForm extends HausDesign_Form_SubForm
         // Set the decorators
         $this->setDecorators(array(
             array('BootstrapDescription', array('escape' => false)),
-            'BootstrapFormErrorMessages',
             'FormElements',
             'Fieldset'
         ));

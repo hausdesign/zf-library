@@ -3,22 +3,6 @@ class HausDesign_Form_Bootstrap extends HausDesign_Form
 {
     function __construct($options = null)
     {
-        // Set the decorators
-        $this->_decorators = array(
-            array('BootstrapDescription', array('escape' => false)),
-            'BootstrapFormErrorMessages',
-            'FormElements',
-            'Form'
-        );
-
-        // Set the decorators
-        $this->setDecorators(array(
-            array('BootstrapDescription', array('escape' => false)),
-            'BootstrapFormErrorMessages',
-            'FormElements',
-            'Form'
-        ));
-
         // Set the element decorators
         $this->_elementDecorators = array(
             'ViewHelper',
@@ -30,7 +14,23 @@ class HausDesign_Form_Bootstrap extends HausDesign_Form
             //array('HtmlTag', array('tag' => 'div', 'class' => 'clear', 'placement' => 'APPEND'))
         );
 
+        // Set the decorators
+        $this->_decorators = array(
+            array('BootstrapDescription', array('escape' => false)),
+            'BootstrapFormErrorMessages',
+            'FormElements',
+            'Form'
+        );
+
         // Call the constructor of the parent object
         parent::__construct($options);
+
+        // Set the decorators
+        $this->setDecorators(array(
+            array('BootstrapDescription', array('escape' => false)),
+            'BootstrapFormErrorMessages',
+            'FormElements',
+            'Form'
+        ));
     }
 }

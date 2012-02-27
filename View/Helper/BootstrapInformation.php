@@ -18,7 +18,7 @@ class HausDesign_View_Helper_BootstrapInformation extends HausDesign_View_Helper
 
             if (count($messages) > 0) {
                 return parent::bootstrapAlert($messages, array(
-            		'class' => 'success'
+                    'class' => 'alert-success'
                 ));
             }
         }

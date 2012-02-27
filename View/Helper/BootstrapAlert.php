@@ -53,13 +53,13 @@ class HausDesign_View_Helper_BootstrapAlert extends Zend_View_Helper_HtmlElement
     protected function _renderMessage($message, $class)
     {
         $divClass = '';
-        $divClass .= 'alert-message';
+        $divClass .= 'alert alert-block';
         if ($class != '') $divClass .= ' ' . $class;
         $divClass .= ' fade in';
 
         $return = '';
 
-        $return .= $this->view->htmlTag('a', array('href' => '#', 'class' => 'close'), '&times;');
+        $return .= $this->view->htmlTag('a', array('href' => '#', 'class' => 'close', 'data-dismiss' => 'alert'), '&times;');
         $return .= $this->view->htmlTag('p', array(), $message);
         $return = $this->view->htmlTag('div', array('class' => $divClass, 'data-alert' => 'alert'), $return);
 

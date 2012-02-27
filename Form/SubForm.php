@@ -49,6 +49,25 @@ class HausDesign_Form_SubForm extends Zend_Form_SubForm
 
     public function setErrorClass()
     {
+        foreach ($this->getElements() as $element) {
+            if ($element->hasErrors()) {
+                $class = $element->getAttrib('class');
+                if ($class == null) $class = '';
+                if ($class != '') $class .= ' ';
+                $class .= 'error';
+                $element->setAttrib('class', $class);
+
+                $row = $element->getDecorator('row');
+                if ($row !== null) {
+                    $class = $row->getOption('class');
+                    if ($class == null) $class = '';
+                    if ($class != '') $class .= ' ';
+                    $class .= 'error';
+                    $row->setOption('class', $class);
+                }
+            }
+        }
+
         foreach ($this->getSubForms() as $subForm) {
             if ($subForm->isErrors()) {
                 $class = $subForm->getAttrib('class');
