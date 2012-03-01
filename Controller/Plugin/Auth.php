@@ -44,7 +44,7 @@ class HausDesign_Controller_Plugin_Auth extends Zend_Controller_Plugin_Abstract
     protected $_errorAction;
 
     /**
-     * Creates an ACL plugin.
+     * Creates an Auth plugin.
      *
      * @param   mixed   $options    An array of options.
      */
