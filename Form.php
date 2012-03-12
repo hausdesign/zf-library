@@ -80,7 +80,7 @@ class HausDesign_Form extends Zend_Form
                 $element->setAttrib('class', $class);
 
                 $row = $element->getDecorator('row');
-                if ($row !== null) {
+                if (($row !== null) && ($row !== false)) {
                     $class = $row->getOption('class');
                     if ($class == null) $class = '';
                     if ($class != '') $class .= ' ';

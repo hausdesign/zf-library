@@ -46,7 +46,9 @@ class HausDesign_Controller_Action_Helper_ViewRenderer extends Zend_Controller_A
     {
         $application = $this->getFrontController()->getParam('application');
         $module = $this->getModule();
-        $scriptPath = $this->view->layout()->getViewScriptPath() . 'views' . DIRECTORY_SEPARATOR . $application . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $module . DIRECTORY_SEPARATOR;
+
+        $viewScriptPath = trim($this->view->layout()->getViewScriptPath(), DIRECTORY_SEPARATOR);
+        $scriptPath = $viewScriptPath . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . $application . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $module . DIRECTORY_SEPARATOR;
         if (! in_array($scriptPath, $this->view->getScriptPaths())) {
             $this->view->addScriptPath($scriptPath);
         }
