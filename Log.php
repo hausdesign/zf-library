@@ -19,9 +19,9 @@ class HausDesign_Log extends Zend_Log
     {
         // If no directory entered, user the default log folder
         if ($logDirectory === null) {
-            $logDirectory = realpath(PUBLIC_PATH . '/../') . '/' . 'temp/logs' . '/';
+            $logDirectory = realpath(PUBLIC_PATH . DIRECTORY_SEPARATOR .'..' . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'temp' . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR;
         } else {
-            $logDirectory = realpath($logDirectory);
+            $logDirectory = realpath($logDirectory) . DIRECTORY_SEPARATOR;
         }
 
         if ($logDirectory !== false) {
