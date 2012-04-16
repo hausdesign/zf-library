@@ -24,12 +24,7 @@ class HausDesign_View_Helper_BootstrapAlert extends Zend_View_Helper_HtmlElement
 
         switch (count($messages)) {
             case 0:
-                if (Zend_Registry::isRegistered('Zend_Translate')) {
-                    $translate = Zend_Registry::get('Zend_Translate');
-                    $markup .= $this->_renderMessage(ucfirst($translate->translate('textErrorsOccurred')), $class);
-                } else {
-                    $markup .= $this->_renderMessage('Error', $class);
-                }
+                $markup .= '';
                 break;
             case 1:
                 $markup .= $this->_renderMessage(array_shift($messages), $class);

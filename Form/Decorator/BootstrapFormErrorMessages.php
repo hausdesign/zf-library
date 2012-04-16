@@ -21,7 +21,9 @@ class HausDesign_Form_Decorator_BootstrapFormErrorMessages extends Zend_Form_Dec
 
         $this->initOptions();
 
-        if ((! $form->isErrors()) && (count($form->getErrorMessages()) <= 0)) {
+        $formErrorMessages = $form->getErrorMessages();
+
+        if ((! $form->isErrors()) && (count($formErrorMessages) <= 0)) {
             return $content;
         }
 
@@ -30,11 +32,20 @@ class HausDesign_Form_Decorator_BootstrapFormErrorMessages extends Zend_Form_Dec
             $showFormErrors = true;
         }
 
-        if ((! $showFormErrors) && (count($form->getErrorMessages()) <= 0)) {
+        if ((! $showFormErrors) && (count($formErrorMessages) <= 0)) {
             return $content;
         }
 
-        $markup = $view->bootstrapError($form->getErrorMessages());
+        if (count($formErrorMessages) == 0) {
+            if (Zend_Registry::isRegistered('Zend_Translate')) {
+                $translate = Zend_Registry::get('Zend_Translate');
+                $formErrorMessages[] = ucfirst($translate->translate('textErrorsOccurred'));
+            } else {
+                $formErrorMessages[] = ucfirst($translate->translate('Error'));
+            }
+        }
+
+        $markup = $view->bootstrapError($formErrorMessages);
 
         switch ($this->getPlacement()) {
             case self::APPEND:

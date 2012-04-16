@@ -211,6 +211,7 @@ class HausDesign_View_Helper_Navigation_BootstrapMenu
             $liClass = array();
             if (($page->count() > 0) && (! $endOfTree)) $liClass[] = 'dropdown';
             if ($isActive) $liClass[] = 'active';
+            if (($page->class !== null) && ($page->class != '')) $liClass[] = $page->class;
             $html .= $myIndent . '    <li' . ((count($liClass) > 0) ? ' class="' . implode(' ', $liClass) . '"' : '') . '>' . self::EOL
                    . $myIndent . '        ' . $this->htmlify($page, $endOfTree) . self::EOL;
 

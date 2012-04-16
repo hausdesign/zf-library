@@ -109,6 +109,9 @@ class HausDesign_Controller_Plugin_Auth extends Zend_Controller_Plugin_Abstract
                             ->setModuleName($this->getErrorHandlerModule())
                             ->setControllerName($this->getErrorHandlerController())
                             ->setActionName($this->getErrorHandlerAction());
+                } else {
+                    $this->_auth->getIdentity()->connect();
+                    $this->_auth->getIdentity()->refresh();
                 }
             }
         }
