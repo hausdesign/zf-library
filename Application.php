@@ -96,7 +96,7 @@ class HausDesign_Application extends Zend_Application
         $queryString = trim($_SERVER['REQUEST_URI'], '/');
 
         // Split querystring into chunks
-        $queryStringChunks = explode('/', $queryString);
+        $queryStringChunks = preg_split('/[\/\?]+/', $queryString);
 
         // Is there a directory (first element in query string) specified?
         $directory = '';

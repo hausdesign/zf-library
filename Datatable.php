@@ -25,8 +25,12 @@ class HausDesign_Datatable
 
         // Count the total rows
         $selectCount = clone $select;
-        $selectCount->reset(Zend_Db_Table_Select::COLUMNS)->columns(array('count' => 'COUNT(*)'));
-        $this->_totalCount = $selectCount->getTable()->fetchRow($selectCount)->count;
+        if (count($selectCount->getPart(Zend_Db_Table_Select::GROUP)) <= 0) {
+            $selectCount->reset(Zend_Db_Table_Select::COLUMNS)->columns(array('count' => 'COUNT(*)'));
+            $this->_totalCount = $selectCount->getTable()->fetchRow($selectCount)->count;
+        } else {
+            $this->_totalCount = $selectCount->getTable()->fetchAll($selectCount)->count();
+        }
 
         // Append search
         if (($sSearch !== null) && ($sSearch != '')) {
@@ -36,8 +40,12 @@ class HausDesign_Datatable
 
         // Count the filtered rows
         $selectCount = clone $selectFiltered;
-        $selectCount->reset(Zend_Db_Table_Select::COLUMNS)->columns(array('count' => 'COUNT(*)'));
-        $this->_filteredCount = $selectCount->getTable()->fetchRow($selectCount)->count;
+        if (count($selectCount->getPart(Zend_Db_Table_Select::GROUP)) <= 0) {
+            $selectCount->reset(Zend_Db_Table_Select::COLUMNS)->columns(array('count' => 'COUNT(*)'));
+            $this->_filteredCount = $selectCount->getTable()->fetchRow($selectCount)->count;
+        } else {
+            $this->_filteredCount = $selectCount->getTable()->fetchAll($selectCount)->count();
+        }
 
         // Load the limited result
         $selectFiltered->limit($iDisplayLength, $iDisplayStart);

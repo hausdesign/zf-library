@@ -77,6 +77,9 @@ class HausDesign_Controller_Action extends Zend_Controller_Action
         $auth = Zend_Auth::getInstance();
         if ($auth->hasIdentity()) {
             $this->_user = $auth->getIdentity();
+            if ($this->_user->isConnected()) {
+                $this->_user->connect();
+            }
         }
     }
 }
