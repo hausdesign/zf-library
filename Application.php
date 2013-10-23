@@ -73,6 +73,16 @@ class HausDesign_Application extends Zend_Application
 
         // Add the options to the Zend Registry
         Zend_Registry::set('config', $this->getOptions());
+		
+		// FIX FOR IIS CACHE FOLDER START
+		$config = new Zend_Config_Ini($applicationConfigFile, $environment);
+		$cache = Zend_Cache::factory('Core',
+									 'File',
+									 $config->resources->cachemanager->administrator->frontend->options->toArray(),
+									 $config->resources->cachemanager->administrator->backend->options->toArray());
+							 
+		Zend_Locale::setCache($cache);
+		
     }
 
     protected function _parseUrl()
@@ -106,7 +116,9 @@ class HausDesign_Application extends Zend_Application
 
         $filepath = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'routing.xml';
         if (file_exists($filepath)) {
-            $xml = simplexml_load_file($filepath);
+			// FIX FOR IIS CACHE FOLDER START
+            //$xml = simplexml_load_file($filepath);
+			$xml = new SimpleXMLElement(file_get_contents($filepath));
             foreach ($xml as $route) {
                 $check = true;
 
