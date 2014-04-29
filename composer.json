@@ -1,0 +1,16 @@
+{
+    "name": "hausdesign/zf-library",
+    "description": "Library for Zend Framework",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.4.0",
+        "zendframework/zendframework1": "~1.12"
+    },
+    "autoload": {
+        "psr-0": {
+            "HausDesign": "src/",
+            "HausDesign_": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
