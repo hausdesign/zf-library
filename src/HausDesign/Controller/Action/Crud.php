@@ -26,7 +26,8 @@ class HausDesign_Controller_Action_Crud extends HausDesign_Controller_Action
     protected $_redirectUrlAdd = '';
     protected $_redirectUrlEdit = '';
     protected $_redirectUrlDelete = '';
-
+	protected $_redirectUrlDeleteConfirm = '';
+	
     /**
      * Initialize
      */
