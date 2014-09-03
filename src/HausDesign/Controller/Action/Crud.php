@@ -22,10 +22,10 @@ class HausDesign_Controller_Action_Crud extends HausDesign_Controller_Action
      */
     protected $_form;
     
-    protected $_redirectUrlCancel = '';
-    protected $_redirectUrlAdd = '';
-    protected $_redirectUrlEdit = '';
-    protected $_redirectUrlDelete = '';
+	protected $_redirectUrlCancel = '';
+	protected $_redirectUrlAdd = '';
+	protected $_redirectUrlEdit = '';
+	protected $_redirectUrlDelete = '';
 	protected $_redirectUrlDeleteConfirm = ''; 
 	
     /**
@@ -48,10 +48,11 @@ class HausDesign_Controller_Action_Crud extends HausDesign_Controller_Action
         $this->view->item = $this->_item;
 
         // Set the redirect url's
-        $this->_redirectUrlCancel = '/' . $request->getModuleName() . '/item/';
-        $this->_redirectUrlAdd = '/' . $request->getModuleName() . '/item/';
-        $this->_redirectUrlEdit = '/' . $request->getModuleName() . '/item/';
-        $this->_redirectUrlDelete = '/' . $request->getModuleName() . '/item/';
+        $this->_redirectUrlCancel 		= '/' . $request->getModuleName() . '/item/';
+        $this->_redirectUrlAdd 			= '/' . $request->getModuleName() . '/item/';
+        $this->_redirectUrlEdit 		= '/' . $request->getModuleName() . '/item/';
+        $this->_redirectUrlDelete 		= '/' . $request->getModuleName() . '/item/';
+		$this->_redirectUrlDeleteConfirm = '/' . $request->getModuleName() . '/item/';
     }
 
     /**
